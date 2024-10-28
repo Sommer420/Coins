@@ -1,0 +1,6 @@
+name: Coins
+version: '${version}'
+main: dk.sommer.coins.Coins
+authors: [Sommer]
+description: Simpelt coinsystem med en MySql database integreret.
+website: arcmc.dk, sqmmer.dk

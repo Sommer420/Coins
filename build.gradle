@@ -1,0 +1,100 @@
+plugins {
+    id 'java'
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("maven-publish")
+}
+
+group = 'dk.sommer'
+version = '0.1-alpha'
+
+compileJava {
+    options.compilerArgs << '-parameters'
+    options.encoding = 'utf-8'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
+    maven { url = "https://oss.sonatype.org/content/groups/public/" }
+    maven { url = "https://repo.triumphteam.dev/snapshots/" }
+    maven { url = "https://repo.pyr.lol/snapshots" }
+    maven { url = "https://repo.extendedclip.com/content/repositories/placeholderapi/" }
+    maven { url = "https://jitpack.io" }
+    maven { url = "https://maven.enginehub.org/repo/" }
+    maven { url { uri("https://storehouse.okaeri.eu/repository/maven-releases/") } }
+}
+
+dependencies {
+    implementation('org.yaml:snakeyaml:2.2') {
+        version {
+            strictly '2.2'
+        }
+    }
+
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.16.0'
+    implementation 'eu.okaeri:okaeri-commands-bukkit:0.9.5'
+    implementation 'eu.okaeri:okaeri-platform-bukkit:0.4.19'
+    implementation 'eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.1'
+    implementation 'org.apache.commons:commons-csv:1.10.0'
+    implementation 'com.github.AbdisKiosk:gui-lib:e1f3735307'
+    implementation 'com.zaxxer:HikariCP:4.0.3'
+    implementation 'com.mysql:mysql-connector-j:8.4.0'
+
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    compileOnly 'lol.pyr:znpcsplus-api:2.0.0-SNAPSHOT'
+    compileOnly 'org.jetbrains:annotations:24.0.0'
+    compileOnly 'me.clip:placeholderapi:2.11.3'
+    compileOnly 'net.luckperms:api:5.4'
+    compileOnly 'org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT'
+}
+
+def targetJavaVersion = 8
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
+
+shadowJar {
+    relocate("eu.okaeri.commands", "dk.sommer.coins.libs.cmd")
+    relocate("org.yaml.snakeyaml", "dk.sommer.coins.libs.yaml")
+    relocate("eu.okaeri", "dk.sommer.coins.libs.okaeri")
+    relocate("com.fasterxml.jackson", "dk.sommer.coins.libs.jackson")
+    relocate("com.mongodb", "dk.sommer.coins.libs.mongodb")
+    relocate("org.mongojack", "dk.sommer.coins.libs.mongojack")
+    relocate("org.bson", "dk.sommer.coins.libs.bson")
+    relocate("org.apache.commons.csv", "dk.sommer.coins.libs.commons.csv")
+    relocate("net.kyori", "dk.sommer.coins.libs.kyori")
+    relocate("fr.mrmicky", "dk.sommer.coins.libs.mrmicky")
+
+
+    //destinationDirectory = file("C:\\Users\\EXG\\Downloads\\server\\plugins")
+    destinationDirectory = file("C:\\Users\\chrso\\Desktop\\Kodehost\\plugins")
+}
+
+build {
+    dependsOn 'shadowJar'
+}
+
+publishing {
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+            artifactId = project.name.toLowerCase()
+        }
+    }
+}
