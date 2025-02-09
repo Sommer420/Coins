@@ -14,7 +14,6 @@ import eu.okaeri.platform.bukkit.i18n.BI18n;
 import org.bukkit.entity.Player;
 
 @Command(label = "coins", aliases = "c")
-@Permission("coins.command.coins")
 public class CoinsCmd implements CommandService {
     private @Inject LangConfig lang;
     private @Inject BI18n i18n;
@@ -31,6 +30,7 @@ public class CoinsCmd implements CommandService {
     }
 
     @Executor(pattern = "*")
+    @Permission("coins.command.coins.other")
     @Async
     public void __(@Context Player sender, @Arg Player player) {
         if (player == null) {
@@ -47,6 +47,7 @@ public class CoinsCmd implements CommandService {
     }
 
     @Executor(pattern = "pay * *")
+    @Permission("coins.command.pay")
     @Async
     public void pay(@Context Player sender, @Arg Player player, @Arg int amount) {
         if (player == null) {
@@ -82,6 +83,7 @@ public class CoinsCmd implements CommandService {
     }
 
     @Executor(pattern = "add * *")
+    @Permission("coins.command.add")
     @Async
     public void add(@Context Player sender, @Arg Player player, @Arg int amount) {
         if (player == null) {
@@ -110,6 +112,7 @@ public class CoinsCmd implements CommandService {
     }
 
     @Executor(pattern = "remove * *")
+    @Permission("coins.command.remove")
     @Async
     public void remove(@Context Player sender, @Arg Player player, @Arg int amount) {
         if (player == null) {
@@ -136,6 +139,7 @@ public class CoinsCmd implements CommandService {
     }
 
     @Executor(pattern = "set * *")
+    @Permission("coins.command.set")
     @Async
     public void set(@Context Player sender, @Arg Player player, @Arg int amount) {
         if (player == null) {
@@ -164,6 +168,7 @@ public class CoinsCmd implements CommandService {
     }
 
     @Executor(pattern = "help")
+    @Permission("coins.command.help")
     @Async
     public void help(@Context Player sender) {
         i18n.get(lang.getPrefix()).sendTo(sender);

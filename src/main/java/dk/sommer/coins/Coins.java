@@ -1,11 +1,13 @@
 package dk.sommer.coins;
 
 import dk.sommer.coins.database.DatabaseManager;
+import dk.sommer.coins.hooks.PlaceholderAPI;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import eu.okaeri.i18n.configs.LocaleConfig;
 import eu.okaeri.injector.annotation.Inject;
+import eu.okaeri.placeholders.schema.resolver.PlaceholderResolver;
 import eu.okaeri.platform.bukkit.OkaeriBukkitPlugin;
 import eu.okaeri.platform.core.annotation.Bean;
 import eu.okaeri.platform.core.annotation.Scan;
@@ -19,6 +21,7 @@ import java.io.File;
 public final class Coins extends OkaeriBukkitPlugin {
 
     private @Inject DatabaseManager databaseManager;
+    private @Inject PlaceholderAPI placeholderAPI;
 
     @Bean
     public EmptyConfig loadLocaleConfigForCommands(LocaleConfig localeConfig) {
@@ -46,12 +49,23 @@ public final class Coins extends OkaeriBukkitPlugin {
         } else {
             databaseManager = new DatabaseManager(dbPath);
         }
+
+        if (placeholderAPI != null) {
+            placeholderAPI.register();
+        } else {
+            getLogger().warning("Kunne ikke registrere PlaceholderAPI");
+        }
     }
 
     @Planned(ExecutionPhase.SHUTDOWN)
     public void shutdown(){
         if (databaseManager != null) {
             databaseManager.closeConnection();
+        }
+        try {
+            placeholderAPI.unregister();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

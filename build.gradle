@@ -37,16 +37,13 @@ dependencies {
     implementation 'eu.okaeri:okaeri-platform-bukkit:0.4.19'
     implementation 'eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.1'
     implementation 'org.apache.commons:commons-csv:1.10.0'
-    implementation 'com.github.AbdisKiosk:gui-lib:e1f3735307'
     implementation 'com.zaxxer:HikariCP:4.0.3'
     implementation 'com.mysql:mysql-connector-j:8.4.0'
 
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
-    compileOnly 'lol.pyr:znpcsplus-api:2.0.0-SNAPSHOT'
     compileOnly 'org.jetbrains:annotations:24.0.0'
     compileOnly 'me.clip:placeholderapi:2.11.3'
-    compileOnly 'net.luckperms:api:5.4'
     compileOnly 'org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT'
 }
 
